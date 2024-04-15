@@ -1,0 +1,20 @@
+{
+  "name": "@koz1024/path-fixer",
+  "version": "0.1.0",
+  "description": "Internal library to resolve paths in the TypeScript project (add extensions in imports with ES module system)",
+  "main": "echo \"It's an executable lib, no need import it\" && exit 1",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koz1024/path-fixer.git"
+  },
+  "author": "Konstantin Zavalny",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/koz1024/path-fixer/issues"
+  },
+  "homepage": "https://github.com/koz1024/path-fixer#readme"
+}
