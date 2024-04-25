@@ -5,7 +5,7 @@ const path = require('path');
 
 const args = process.argv.slice(2);
 
-const regexp = new RegExp(/import (.*(['"]\..*['"]))/gmi);
+const regexp = new RegExp(/import (.*)['"](\..*)['"]/gmi);
 
 (async function(){
     const tsconfig = await getTsConfig(args);
@@ -46,7 +46,7 @@ async function processFile(file, tsconfig) {
     //todo: process "@" imports
     let data = await fs.readFile(file, {encoding: "utf8"});
     data = data.replace(regexp, (match, p1, p2) => {
-        return `import ${p1.slice(0, -1)}.js"`;
+        return `import ${p1} "${p2}.js"`;
     });
     await fs.writeFile(file, data);
 }

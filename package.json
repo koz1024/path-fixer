@@ -1,6 +1,6 @@
 {
   "name": "@koz1024/path-fixer",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Internal library to resolve paths in the TypeScript project (add extensions in imports with ES module system)",
   "main": "echo \"It's an executable lib, no need import it\" && exit 1",
   "scripts": {
