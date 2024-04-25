@@ -5,7 +5,7 @@ const path = require('path');
 
 const args = process.argv.slice(2);
 
-const regexp = new RegExp(/import (.*"(\..*)")/gmi);
+const regexp = new RegExp(/import (.*(['"]\..*['"]))/gmi);
 
 (async function(){
     const tsconfig = await getTsConfig(args);
