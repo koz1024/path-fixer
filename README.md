@@ -18,3 +18,11 @@ and run:
 ```shell
 npx path-fixer
 ```
+
+```shell
+npx path-fixer -c tsconfig.json # to specify tsconfig file
+npx path-fixer -d path/to/build # to specify build directory
+```
+
+```shell
+```

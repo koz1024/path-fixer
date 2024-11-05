@@ -3,22 +3,32 @@
 const fs = require('fs/promises');
 const path = require('path');
 
-const args = process.argv.slice(2);
+const tsconfigName = getArg('-c') || 'tsconfig.json';
+let outDir = getArg('-d');
+
+function getArg(key) {
+    const index = process.argv.indexOf(key);
+    if (index === -1) return null;
+    return process.argv[index + 1];
+}
 
 const regexp = new RegExp(/import (.*)['"](\..*)['"]/gmi);
 
 (async function(){
-    const tsconfig = await getTsConfig(args);
-    const dir = path.resolve(tsconfig.compilerOptions.outDir);
-    const files = await getFiles(dir);
+    if (!outDir) {
+        const tsconfig = await getTsConfig();
+        outDir = path.resolve(tsconfig.compilerOptions.outDir);
+    } else {
+        outDir = path.resolve(outDir);
+    }
+    const files = await getFiles(outDir);
     for (let file of files) {
         if (!file.endsWith('.js')) continue;
         await processFile(file, {});
     }
 })();
 
-async function getTsConfig(args) {
-    const tsconfigName = args[0] || 'tsconfig.json';
+async function getTsConfig() {
     let tsconfig;
     try {
         tsconfig = JSON.parse(await fs.readFile(tsconfigName, {encoding: "utf8"}));
