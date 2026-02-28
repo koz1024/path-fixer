@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const fs = require('fs/promises');
+const fsSync = require('fs');
 const path = require('path');
 
 const tsconfigName = getArg('-c') || 'tsconfig.json';
@@ -56,7 +57,18 @@ async function processFile(file, tsconfig) {
     //todo: process "@" imports
     let data = await fs.readFile(file, {encoding: "utf8"});
     data = data.replace(regexp, (match, p1, p2) => {
-        return `import ${p1} "${p2}.js"`;
+        const fileDir = path.dirname(file);
+        const jsFilePath = path.resolve(fileDir, `${p2}.js`);
+        const indexJsPath = path.resolve(fileDir, p2, 'index.js');
+        let resolvedSpecifier = `${p2}.js`;
+
+        if (fsSync.existsSync(jsFilePath)) {
+            resolvedSpecifier = `${p2}.js`;
+        } else if (fsSync.existsSync(indexJsPath)) {
+            resolvedSpecifier = `${p2}/index.js`;
+        }
+
+        return `import ${p1} "${resolvedSpecifier}"`;
     });
     await fs.writeFile(file, data);
 }
