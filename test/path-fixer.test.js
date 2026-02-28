@@ -97,3 +97,26 @@ test('falls back to "<specifier>.js" when neither path exists', async () => {
         assert.match(result, /import OpenRouter from\s+"\.\/common\/providers\/OpenRouter\.js";/);
     });
 });
+
+test('keeps specifier unchanged when it already has ".js" extension', async () => {
+    await withTempDir(async (tempDir) => {
+        const outDir = path.join(tempDir, 'dist');
+        const providersDir = path.join(outDir, 'common', 'providers');
+        await fs.mkdir(providersDir, { recursive: true });
+
+        const sourceFile = path.join(outDir, 'entry.js');
+        await fs.writeFile(
+            sourceFile,
+            'import OpenRouter from "./common/providers/OpenRouter.js";\n',
+            'utf8'
+        );
+
+        await fs.writeFile(path.join(providersDir, 'OpenRouter.js'), 'export default 1;\n', 'utf8');
+
+        await runCli(['-d', outDir], PROJECT_ROOT);
+
+        const result = await fs.readFile(sourceFile, 'utf8');
+        assert.match(result, /import OpenRouter from\s+"\.\/common\/providers\/OpenRouter\.js";/);
+        assert.doesNotMatch(result, /OpenRouter\.js\.js/);
+    });
+});

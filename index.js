@@ -57,6 +57,10 @@ async function processFile(file, tsconfig) {
     //todo: process "@" imports
     let data = await fs.readFile(file, {encoding: "utf8"});
     data = data.replace(regexp, (match, p1, p2) => {
+        if (p2.endsWith('.js')) {
+            return `import ${p1} "${p2}"`;
+        }
+
         const fileDir = path.dirname(file);
         const jsFilePath = path.resolve(fileDir, `${p2}.js`);
         const indexJsPath = path.resolve(fileDir, p2, 'index.js');
